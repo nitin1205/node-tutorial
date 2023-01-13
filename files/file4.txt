@@ -1,0 +1,5 @@
+this is written by node js using append file method in fs module
+
+this is written by node js using append file method in fs module
+
+this is written by node js using append file method in fs module

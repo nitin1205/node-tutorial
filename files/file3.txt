@@ -1,0 +1,3 @@
+this is written by node js
+
+this is written by node js using append file method in fs module/media/shady/New Volume/programs/node/node-tutorial/files/newfile3.txt

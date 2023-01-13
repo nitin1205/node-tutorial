@@ -1,0 +1,4 @@
+hello world my name is the real slm shady.
+
+
+this is witten by node js promise fs module
