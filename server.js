@@ -66,150 +66,173 @@
 
 // creating web server
 
-const http = require('http');
-const path = require('path');
-const fs = require('fs');
-const fsPromises = require('fs').promises;
+// const http = require('http');
+// const path = require('path');
+// const fs = require('fs');
+// const fsPromises = require('fs').promises;
 
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
-const serveFile = async (filePath, contentType, response) => {
-    try {
-        const rawData = await fsPromises.readFile(
-            filePath, 
-            !contentType.includes('image') ? 'utf8' : ''
-        );
-        const data = contentType === 'application/json'
-            ? JSON.parse(rawData) : rawData;
-        response.writeHead(
-            filePath.includes('404.html') ? 404 : 200,
-            { 'content-Type': contentType }
-        );
-        response.end(
-            contentType === 'application/json' ? JSON.stringify(data) : data
-        );
-    } catch (err) {
-        console.log(err);
-        response.statusCode = 500;
-        response.end();
-    }
-}; 
-
-
+// const serveFile = async (filePath, contentType, response) => {
+//     try {
+//         const rawData = await fsPromises.readFile(
+//             filePath, 
+//             !contentType.includes('image') ? 'utf8' : ''
+//         );
+//         const data = contentType === 'application/json'
+//             ? JSON.parse(rawData) : rawData;
+//         response.writeHead(
+//             filePath.includes('404.html') ? 404 : 200,
+//             { 'content-Type': contentType }
+//         );
+//         response.end(
+//             contentType === 'application/json' ? JSON.stringify(data) : data
+//         );
+//     } catch (err) {
+//         console.log(err);
+//         response.statusCode = 500;
+//         response.end();
+//     }
+// }; 
 
 
+// const server = http.createServer((req, res) => {
+//     console.log(req.url, req.method);
 
-const server = http.createServer((req, res) => {
-    console.log(req.url, req.method);
+//     const extension = path.extname(req.url);
 
-    const extension = path.extname(req.url);
+//     let contentType;
 
-    let contentType;
+//     switch (extension) {
+//         case '.css':
+//             contentType = 'text/css';
+//             break;
+//         case '.js':
+//             contentType = 'text/javascript';
+//             break;
+//         case '.json':
+//             contentType = 'application/json';
+//             break;
+//         case '.jpg':
+//             contentType = 'image/jpeg';
+//             break;
+//         case '.png':
+//             contentType = 'image/png';
+//             break;
+//         case '.txt':
+//             contentType = 'text/plain';
+//             break;
+//         default:
+//             contentType = 'text/html';
+//     }
 
-    switch (extension) {
-        case '.css':
-            contentType = 'text/css';
-            break;
-        case '.js':
-            contentType = 'text/javascript';
-            break;
-        case '.json':
-            contentType = 'application/json';
-            break;
-        case '.jpg':
-            contentType = 'image/jpeg';
-            break;
-        case '.png':
-            contentType = 'image/png';
-            break;
-        case '.txt':
-            contentType = 'text/plain';
-            break;
-        default:
-            contentType = 'text/html';
-    }
-
-    let filePath =
-        contentType === 'text/html' && req.url === '/'
-            ? path.join(__dirname, 'views', 'index.html')
-            : contentType === 'text/html' && req.url.slice(-1) === '/'
-                ? path.join(__dirname, 'views', req.url, 'index.html')
-                : contentType === 'text/html'
-                    ? path.join(__dirname, 'views', req.url)
-                    : path.join(__dirname, req.url);
+//     let filePath =
+//         contentType === 'text/html' && req.url === '/'
+//             ? path.join(__dirname, 'views', 'index.html')
+//             : contentType === 'text/html' && req.url.slice(-1) === '/'
+//                 ? path.join(__dirname, 'views', req.url, 'index.html')
+//                 : contentType === 'text/html'
+//                     ? path.join(__dirname, 'views', req.url)
+//                     : path.join(__dirname, req.url);
     
-    // makes .html extension not require in the brower
-    if (!extension && req.url.slice(-1) !== '/') filePath += '.html';
+//     // makes .html extension not require in the brower
+//     if (!extension && req.url.slice(-1) !== '/') filePath += '.html';
 
-    const fileExists = fs.existsSync(filePath);
+//     const fileExists = fs.existsSync(filePath);
 
-    if(fileExists) {
-        serveFile(filePath, contentType, res);
-    } else{
-        console.log(path.parse(filePath));
-        switch (path,parse(filePath).base ) {
-            case 'old-page.html':
-                res.writeHead(301, { 'Location': '/new-page.html' });
-                res.end();
-                break;
-            case 'www-page.html':
-                res.writeHead(301, { 'Location': '/' });
-                res.end();
-                break;
-            default: 
-                serveFile(path.join(__dirname, 'views', '404.html'), 'text/html', res);
-        };
-    };
-});
-
-
-server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
+//     if(fileExists) {
+//         serveFile(filePath, contentType, res);
+//     } else{
+//         console.log(path.parse(filePath));
+//         switch (path,parse(filePath).base ) {
+//             case 'old-page.html':
+//                 res.writeHead(301, { 'Location': '/new-page.html' });
+//                 res.end();
+//                 break;
+//             case 'www-page.html':
+//                 res.writeHead(301, { 'Location': '/' });
+//                 res.end();
+//                 break;
+//             default: 
+//                 serveFile(path.join(__dirname, 'views', '404.html'), 'text/html', res);
+//         };
+//     };
+// });
 
 
+// server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
-
-
-
-
-serveFile(filePath, contentType, res);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// serveFile(filePath, contentType, res);
 
 // listening to uncaught error
 // process.on('uncaughtException', err => {
 //     console.log(`error in reading file: ${err}`);
 //     process.exit(1);
 // });
+
+// creating web server using express
+
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+
+const { logger } = require('./middleware/logEvents');
+const errorHandler = require('./middleware/errorHandler');
+
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+// cutom middleware logger
+app.use(logger);
+
+// cors middleware
+const whitelist = ['http://localhost:3000'];
+
+const corsOption = {
+    origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by cors'))
+        }
+    },
+    optionSuccessStatus: 200
+};
+app.use(cors(corsOption));
+
+// in-built express middlewares
+
+// middleware for content-type: applecation/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }));
+
+// middleware for json
+app.use(express.json());
+
+// middleware to serev static file
+app.use(express.static(path.join(__dirname, '/public')));
+
+// route handlers
+app.get('/', (req, res) => {
+    res.send('index');
+});
+
+app.get('/hello', (req, res) => {
+    res.send('Hello World');
+});
+
+app.get('/*', (req, res) => {
+    res.status(400).send('404 not found')
+});
+
+app.use(errorHandler);
+
+app.listen(PORT, () => console.log(`listening to port:- ${PORT}`));
+
+
+
+
+
+
+
