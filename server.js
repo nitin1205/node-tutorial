@@ -177,6 +177,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
+const corsOptions = require('./config/corsOptions')
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -188,19 +189,7 @@ const PORT = process.env.PORT || 3000;
 app.use(logger);
 
 // cors middleware
-const whitelist = ['http://localhost:3000'];
-
-const corsOption = {
-    origin: (origin, callback) => {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by cors'))
-        }
-    },
-    optionSuccessStatus: 200
-};
-app.use(cors(corsOption));
+app.use(cors(corsOptions));
 
 // in-built express middlewares
 
