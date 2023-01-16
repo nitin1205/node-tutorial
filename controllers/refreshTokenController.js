@@ -8,13 +8,9 @@ require('dotenv').config()
 const handleRefreshToken = (req, res) => {
     const cookies = req.cookies;
     console.log(cookies);
-    if (!cookies?.jwt) return res.status(401);
-    console.log('hifhdsj')
-    console.log(cookies.jwt);
+    if (!cookies?.jwt) return res.sendStatus(401);
     const refreshToken = cookies.jwt;
-    const foundUser1 = usersDB.users.find(person => console.log(person.refreshToken));
     const foundUser = usersDB.users.find(person => person.refreshToken === refreshToken);
-    console.log(foundUser)
     if (!foundUser) return res.sendStatus(403); //forbidden
     // evaluate JWT
     jwt.verify(
