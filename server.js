@@ -176,10 +176,13 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const corsOptions = require('./config/corsOptions')
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
+const verifyJWT = require('./middleware/verifyJWT');
+
 
 const app = express();
 
@@ -199,20 +202,22 @@ app.use(express.urlencoded({ extended: false }));
 // middleware for json
 app.use(express.json());
 
+// middleware for cookies
+app.use(cookieParser());
+
 // middleware to serev static file
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/subdir', express.static(path.join(__dirname, '/public')));
 
 // imported routes
 app.use('/', require('./routes/root'));
-
-app.use('/subdir', require('./routes/subdir'));
-
 app.use('/register', require('./routes/register'));
-
 app.use('/auth', require('./routes/auth'));
+app.use('/refresh', require('./routes/refresh'));
 
+app.use(verifyJWT);
 app.use('/employees', require('./routes/api/employees'));
+app.use('/subdir', require('./routes/subdir'));
 
 
 // route handlers
