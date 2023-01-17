@@ -288,3 +288,5 @@
 20230117	19:37:45	9dccbec0-96ac-4962-909f-7c37118c6ad0	GET	undefined	/refresh
 20230117	20:00:12	7f0e5564-7abf-41c7-8f70-9080a2ad4cf5	POST	undefined	/auth
 20230117	20:00:45	1ab997ac-4746-4877-ba52-ce4dcf86ba06	POST	undefined	/employees
+20230117	21:55:42	57bc4e2d-8913-415a-b738-80cfc0d350e5	POST	undefined	/register
+20230117	21:56:52	dddc8110-3ef4-48cd-9c7d-5f321d23abb6	POST	undefined	/register
