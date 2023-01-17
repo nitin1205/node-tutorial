@@ -172,18 +172,24 @@
 // });
 
 // creating web server using express
+require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
 const credentials = require('./middleware/credentials')
 const corsOptions = require('./config/corsOptions')
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const verifyJWT = require('./middleware/verifyJWT');
+const connectDB = require('./config/dbConn');
 
+// connect top DB
+mongoose.set('strictQuery', false);
+connectDB();
 
 const app = express();
 
@@ -253,7 +259,10 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`listening to port:- ${PORT}`));
+mongoose.connection.once('open', () => {
+    console.log('connected to mongoDB');
+    app.listen(PORT, () => console.log(`listening to port:- ${PORT}`));
+});
 
 
 
